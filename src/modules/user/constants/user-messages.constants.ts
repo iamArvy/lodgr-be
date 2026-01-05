@@ -1,0 +1,16 @@
+export const USER_MESSAGES = {
+  alreadyExists: 'User already exists',
+  notFound: 'User not found',
+  alreadyActive: 'User already active',
+  alreadyDeactivated: 'User already deactivated',
+  inactive: 'User not active',
+  listed: 'Users listed successfully',
+  activated: 'User activated successfully',
+  deactivated: 'User deactivated successfully',
+  created: 'User created successfully',
+  updated: 'User updated successfully',
+  deleted: 'User deleted successfully',
+  patched: 'User patched successfully',
+  alreadyDeleted: 'User already deleted',
+  found: 'User found',
+};
