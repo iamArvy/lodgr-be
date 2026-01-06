@@ -11,6 +11,7 @@ import { config, validationSchema, winstonConfig } from './config';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './modules/health/health.module';
 import { MetricsModule } from './modules/metrics/metrics.module';
+import { PropertyModule } from './modules/property/property.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -25,6 +26,7 @@ import { UserModule } from './modules/user/user.module';
     UserModule,
     HealthModule,
     MetricsModule,
+    PropertyModule,
   ],
   providers: [
     {

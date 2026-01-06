@@ -30,7 +30,7 @@ export const appConfig = registerAs('app', () => ({
     ? `${process.env.APP_PREFIX}/${process.env.APP_VERSION || 'v1'}`
     : '',
   version: process.env.APP_VERSION || 'v1',
-  description: process.env.APP_DESCRIPTION,
+  description: process.env.APP_DESCRIPTION ?? '',
 }));
 
 export const appValidation = joi.object({

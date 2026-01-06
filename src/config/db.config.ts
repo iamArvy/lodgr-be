@@ -10,11 +10,11 @@ export const dbConfig = registerAs(
   'database',
   (): TypeOrmModuleOptions => ({
     type: 'postgres',
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
+    host: process.env.DATABASE_HOST,
+    port: Number(process.env.DATABASE_PORT),
+    username: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
 
     // Auto-load entities from TypeOrmModule.forFeature() in all modules
     autoLoadEntities: true,
@@ -39,9 +39,9 @@ export const dbConfig = registerAs(
 );
 
 export const dbValidation = joi.object({
-  DB_HOST: joi.string().required(),
-  DB_PORT: joi.number().required(),
-  DB_USER: joi.string().required(),
-  DB_PASS: joi.string().required(),
-  DB_NAME: joi.string().required(),
+  DATABASE_HOST: joi.string().required(),
+  DATABASE_PORT: joi.number().required(),
+  DATABASE_USER: joi.string().required(),
+  DATABASE_PASSWORD: joi.string().required(),
+  DATABASE_NAME: joi.string().required(),
 });

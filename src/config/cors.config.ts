@@ -15,5 +15,5 @@ export const corsConfig = registerAs(
 );
 
 export const corsValidation = joi.object({
-  CORS_ORIGINS: joi.string().optional(),
+  CORS_ORIGINS: joi.string().empty('').allow(null, '').optional(),
 });

@@ -1,30 +1,30 @@
 services:
   db:
     image: postgres:latest
-    container_name: app-postgres-db
+    container_name: lodgr-postgres-db
     restart: unless-stopped
 
     environment:
-      POSTGRES_USER: ${DB_USER:-app-db-user}
-      POSTGRES_PASSWORD: ${DB_PASS:-app-db-password}
-      POSTGRES_DB: ${DB_NAME:-app-db}
+      POSTGRES_USER: ${DATABASE_USER:-app-db-user}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-app-db-password}
+      POSTGRES_DB: ${DATABASE_NAME:-app-db}
 
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "${DATABASE_PORT:-5432}:5432"
 
     volumes:
-      - app-data:/var/lib/postgresql/data
+      - lodgr-api-data:/var/lib/postgresql/data
 
     networks:
-      - app-network
+      - lodgr-api-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-app-db-user}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER:-app-db-user}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
 volumes:
-  app-data:
+  lodgr-api-data:
 
 networks:
-  app-network:
+  lodgr-api-network:

@@ -3,12 +3,12 @@ import { DocumentBuilder } from '@nestjs/swagger';
 
 import { appConfig } from './app.config';
 
-const { name, version } = appConfig();
+const { name, description, version } = appConfig();
 
 export const swaggerConfig = registerAs('swagger', () => ({
   document: new DocumentBuilder()
     .setTitle(name)
-    .setDescription('FullstackEdge E-commerce API')
+    .setDescription(description)
     .setVersion(version)
     .setContact(
       'Oluwaseyi Oke',
