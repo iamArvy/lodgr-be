@@ -58,7 +58,11 @@ export interface IMortgageTerms {
   durationInYears: number;
   estimatedMonthlyPayment: number;
 }
-export interface IRentDetails {
+
+export interface IPropertyDetails {
+  kind: ListingType;
+}
+export interface IRentDetails extends IPropertyDetails {
   price: number; // monthly rent
   availableFrom: Date;
   availableTo?: Date;
@@ -66,7 +70,7 @@ export interface IRentDetails {
   securityDeposit?: number;
 }
 
-export interface ISaleDetails {
+export interface ISaleDetails extends IPropertyDetails {
   price: number;
   allowsMortgage: boolean;
   mortgageTerms?: {
@@ -92,9 +96,6 @@ export class Property extends SoftDeleteEntity {
     default: PropertyType.HOUSE,
   })
   propertyType: PropertyType;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  price: string;
 
   @Column({ type: 'simple-array', default: '' })
   tags: string[];
@@ -130,9 +131,6 @@ export class Property extends SoftDeleteEntity {
   })
   listingType: ListingType;
 
-  @Column({ name: 'rent_details', type: 'jsonb', nullable: true })
-  rentDetails?: IRentDetails;
-
-  @Column({ type: 'jsonb', nullable: true })
-  saleDetails?: ISaleDetails;
+  @Column({ name: 'property_details', type: 'jsonb' })
+  propertyDetails: IRentDetails | ISaleDetails;
 }

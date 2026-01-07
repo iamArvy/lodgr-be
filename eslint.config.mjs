@@ -136,7 +136,7 @@ export default [
         'error',
         {
           selector: 'property',
-          format: ['snake_case'],
+          format: ['snake_case', 'camelCase', 'PascalCase'],
           leadingUnderscore: 'allow',
         },
       ],
