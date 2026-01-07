@@ -1,5 +1,5 @@
 import { SoftDeleteEntity } from 'src/database/entities';
-import { Column } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 
 export enum PropertyType {
   HOUSE = 'house',
@@ -25,11 +25,59 @@ export enum Amenity {
   SECURITY = 'security',
 }
 
-export interface IPropertyDetails {
-  key: string;
-  value: string | number | boolean;
+export enum ListingType {
+  RENT = 'rent',
+  SALE = 'sale',
 }
 
+export interface ILocation {
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  zipCode: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface IAdditionalDetails {
+  parkingSpaces?: number;
+  petsAllowed?: boolean;
+  smokingAllowed?: boolean;
+  floorArea?: number; // square feet
+  yearBuilt?: number;
+  numberOfFloors?: number;
+  numberOfBedrooms?: number;
+  numberOfBathrooms?: number;
+  isFurnished?: boolean;
+}
+
+export interface IMortgageTerms {
+  minimumDownPayment: number; // %
+  interestRate: number; // %
+  durationInYears: number;
+  estimatedMonthlyPayment: number;
+}
+export interface IRentDetails {
+  price: number; // monthly rent
+  availableFrom: Date;
+  availableTo?: Date;
+  minimumStayInMonths?: number;
+  securityDeposit?: number;
+}
+
+export interface ISaleDetails {
+  price: number;
+  allowsMortgage: boolean;
+  mortgageTerms?: {
+    minimumDownPayment: number; // %
+    interestRate: number; // %
+    durationInYears: number;
+    estimatedMonthlyPayment: number;
+  };
+}
+
+@Entity('properties')
 export class Property extends SoftDeleteEntity {
   @Column()
   name: string;
@@ -37,57 +85,54 @@ export class Property extends SoftDeleteEntity {
   @Column({ type: 'text', nullable: true })
   description?: string;
 
-  @Column({ type: 'enum', enum: PropertyType, default: PropertyType.HOUSE })
+  @Column({
+    name: 'property_type',
+    type: 'enum',
+    enum: PropertyType,
+    default: PropertyType.HOUSE,
+  })
   propertyType: PropertyType;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
-  price: number;
+  price: string;
 
-  @Column({ type: 'simple-array' })
+  @Column({ type: 'simple-array', default: '' })
   tags: string[];
 
-  @Column({ type: 'simple-array' })
+  @Column({ type: 'simple-array', default: '' })
   images: string[];
 
   @Column({ type: 'jsonb' })
-  location: {
-    address: string;
-    city: string;
-    state: string;
-    country: string;
-    zipCode: string;
-    latitude: number;
-    longitude: number;
-  };
+  location: ILocation;
+
+  @Column({ name: 'additional_details', type: 'jsonb', nullable: true })
+  additionalDetails?: IAdditionalDetails;
 
   @Column({ type: 'decimal', precision: 2, scale: 1, default: 0 })
-  rating: number;
+  rating: string;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ name: 'reviews_count', type: 'int', default: 0 })
   reviewsCount: number;
 
-  @Column({ type: 'simple-array' })
-  amenities: string[];
+  @Column({
+    type: 'enum',
+    enum: Amenity,
+    array: true,
+    default: [],
+  })
+  amenities: Amenity[];
 
-  @Column({ type: 'date' })
-  availableFrom: Date;
+  @Column({
+    name: 'listing_type',
+    type: 'enum',
+    enum: ListingType,
+    default: ListingType.SALE,
+  })
+  listingType: ListingType;
 
-  @Column({ type: 'date', nullable: true })
-  availableTo: Date | null;
-
-  @Column({ type: 'boolean', default: false })
-  isFurnished: boolean;
+  @Column({ name: 'rent_details', type: 'jsonb', nullable: true })
+  rentDetails?: IRentDetails;
 
   @Column({ type: 'jsonb', nullable: true })
-  additionalDetails: {
-    parkingSpaces: number;
-    petsAllowed: boolean;
-    smokingAllowed: boolean;
-    floorArea: number; // in square feet
-    yearBuilt: number;
-    numberOfFloors: number;
-    numberOfBedrooms: number;
-    numberOfBathrooms: number;
-    isFurnished: boolean;
-  };
+  saleDetails?: ISaleDetails;
 }
