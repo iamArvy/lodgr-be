@@ -1,8 +1,9 @@
+import { PaginationMeta } from '@hng-sdk/orm';
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, plainToInstance } from 'class-transformer';
 import {
-  createApiPaginatedResponseDto,
-  createApiResponseDto,
+  ApiListResponseDto,
+  ApiResponseDto,
 } from 'src/common/dto/api-response.dto';
 
 import { Amenity, ListingType, PropertyType } from '../entities';
@@ -79,7 +80,30 @@ export class PropertyResponseDto {
   }
 }
 
-export const PropertyResponse = createApiResponseDto(PropertyResponseDto);
+export class PropertyResponse extends ApiResponseDto {
+  @ApiProperty({ type: PropertyResponseDto })
+  data: PropertyResponseDto;
 
-export const ListPropertyResponse =
-  createApiPaginatedResponseDto(PropertyResponseDto);
+  constructor(message: string, data: PropertyResponseDto) {
+    super();
+    Object.assign(this, { message, data: new PropertyResponseDto(data) });
+  }
+}
+
+export class ListPropertyResponse extends ApiListResponseDto {
+  @ApiProperty({ type: [PropertyResponseDto] })
+  data: PropertyResponseDto[];
+
+  constructor(
+    message: string,
+    data: PropertyResponseDto[],
+    meta: Partial<PaginationMeta>,
+  ) {
+    super();
+    Object.assign(this, {
+      message,
+      data: plainToInstance(PropertyResponseDto, data),
+      meta,
+    });
+  }
+}

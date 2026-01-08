@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
+import { ApiResponseDto } from 'src/common/dto/api-response.dto';
 
 import { USER_MESSAGES } from './constants';
 import * as dto from './dto';
@@ -8,11 +9,13 @@ import { UserRepository } from './user.repository';
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
-  create(createUserDto: dto.CreateUserDto) {
-    return this.userRepository.create({
+
+  async create(createUserDto: dto.CreateUserDto) {
+    const user = await this.userRepository.create({
       createPayload: createUserDto,
       transactionOptions: { useTransaction: false },
     });
+    return new dto.UserResponse(USER_MESSAGES.created, user);
   }
 
   async findAll() {
@@ -21,11 +24,11 @@ export class UserService {
       filterRecordOptions: { is_deleted: false },
     });
     const items = plainToInstance(dto.UserDto, payload);
-    return {
-      message: USER_MESSAGES.listed,
-      data: items,
-      meta: paginationMeta,
-    };
+    return new dto.ListUserResponse(
+      USER_MESSAGES.listed,
+      items,
+      paginationMeta,
+    );
   }
 
   async findOne(id: string) {
@@ -33,7 +36,7 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(USER_MESSAGES.notFound);
     }
-    return user;
+    return new dto.UserResponse(USER_MESSAGES.found, user);
   }
 
   async update(id: string, updateUserDto: dto.UpdateUserDto) {
@@ -42,7 +45,7 @@ export class UserService {
       updatePayload: updateUserDto,
       transactionOptions: { useTransaction: false },
     });
-    return { message: USER_MESSAGES.updated };
+    return new ApiResponseDto(USER_MESSAGES.updated);
   }
 
   async remove(id: string) {
@@ -51,6 +54,6 @@ export class UserService {
       updatePayload: { deleted_at: new Date() },
       transactionOptions: { useTransaction: false },
     });
-    return { message: USER_MESSAGES.deleted };
+    return new ApiResponseDto(USER_MESSAGES.deleted);
   }
 }

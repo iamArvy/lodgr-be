@@ -22,9 +22,8 @@ export class UserController {
 
   @docs.CreateUserDocs()
   @Post()
-  async create(@Body() createUserDto: dto.CreateUserDto) {
-    const user = await this.userService.create(createUserDto);
-    return new dto.UserDto(user);
+  create(@Body() createUserDto: dto.CreateUserDto) {
+    return this.userService.create(createUserDto);
   }
 
   @docs.ListUserDocs()
@@ -35,9 +34,8 @@ export class UserController {
 
   @docs.GetUserDocs()
   @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string) {
-    const user = await this.userService.findOne(id);
-    return new dto.UserDto(user);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.userService.findOne(id);
   }
 
   @docs.UpdateUserDocs()

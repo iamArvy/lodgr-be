@@ -1,8 +1,9 @@
+import { PaginationMeta } from '@hng-sdk/orm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, plainToInstance } from 'class-transformer';
 import {
-  createApiPaginatedResponseDto,
-  createApiResponseDto,
+  ApiListResponseDto,
+  ApiResponseDto,
 } from 'src/common/dto/api-response.dto';
 
 import { User } from '../entities';
@@ -26,6 +27,26 @@ export class UserDto implements Partial<User> {
   }
 }
 
-export const UserResponse = createApiResponseDto(UserDto);
+export class UserResponse extends ApiResponseDto {
+  @ApiProperty({ type: UserDto })
+  data: UserDto;
 
-export const ListUserResponse = createApiPaginatedResponseDto(UserDto);
+  constructor(message: string, data: UserDto) {
+    super();
+    Object.assign(this, { message, data: new UserDto(data) });
+  }
+}
+
+export class ListUserResponse extends ApiListResponseDto {
+  @ApiProperty({ type: [UserDto] })
+  data: UserDto[];
+
+  constructor(message: string, data: UserDto[], meta: Partial<PaginationMeta>) {
+    super();
+    Object.assign(this, {
+      message,
+      data: plainToInstance(UserDto, data),
+      meta,
+    });
+  }
+}

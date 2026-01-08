@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { plainToInstance } from 'class-transformer';
+import { ApiResponseDto } from 'src/common/dto/api-response.dto';
 
 import { PROPERTY_MESSAGES } from './constants';
 import * as dto from './dto';
@@ -43,10 +43,11 @@ export class PropertyService {
       createPayload: createPropertyDto,
       transactionOptions: { useTransaction: false },
     });
-    return {
-      message: PROPERTY_MESSAGES.created,
-      data: new dto.PropertyResponseDto(property),
-    };
+
+    return new dto.PropertyResponse(
+      PROPERTY_MESSAGES.created,
+      new dto.PropertyResponseDto(property),
+    );
   }
 
   async findAll() {
@@ -54,20 +55,20 @@ export class PropertyService {
       paginationPayload: { page: 1, limit: 100 },
       filterRecordOptions: { is_deleted: false },
     });
-    const properties = plainToInstance(dto.PropertyResponseDto, payload);
-    return {
-      message: PROPERTY_MESSAGES.listed,
-      data: properties,
-      meta: paginationMeta,
-    };
+
+    return new dto.ListPropertyResponse(
+      PROPERTY_MESSAGES.listed,
+      payload,
+      paginationMeta,
+    );
   }
 
   async findOne(id: string) {
     const property = await this.getOrThrowProperty(id);
-    return {
-      message: PROPERTY_MESSAGES.found,
-      data: new dto.PropertyResponseDto(property),
-    };
+    return new dto.PropertyResponse(
+      PROPERTY_MESSAGES.found,
+      new dto.PropertyResponseDto(property),
+    );
   }
 
   async update(id: string, dto: dto.UpdatePropertyDto) {
@@ -79,7 +80,7 @@ export class PropertyService {
       updatePayload: dto,
       transactionOptions: { useTransaction: false },
     });
-    return { message: PROPERTY_MESSAGES.updated };
+    return new ApiResponseDto(PROPERTY_MESSAGES.updated);
   }
 
   async remove(id: string) {
@@ -89,6 +90,6 @@ export class PropertyService {
       updatePayload: { is_deleted: true, deleted_at: new Date() },
       transactionOptions: { useTransaction: false },
     });
-    return { message: PROPERTY_MESSAGES.deleted };
+    return new ApiResponseDto(PROPERTY_MESSAGES.deleted);
   }
 }
