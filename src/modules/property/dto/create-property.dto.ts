@@ -8,7 +8,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
-  IsDateString,
+  IsDate,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -132,12 +132,12 @@ export class RentDetailsDto extends DetailsDto {
   price: number;
 
   @ApiProperty({ example: '2026-02-01' })
-  @IsDateString()
+  @IsDate()
   availableFrom: Date;
 
   @ApiPropertyOptional({ example: '2027-02-01' })
   @IsOptional()
-  @IsDateString()
+  @IsDate()
   availableTo?: Date;
 
   @ApiPropertyOptional({ example: 6 })

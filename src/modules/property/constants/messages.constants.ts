@@ -11,4 +11,6 @@ export const PROPERTY_MESSAGES = {
   saleDetailsRequired: 'saleDetails is required for sales',
   saleDetailsNotAllowed: 'saleDetails not allowed for rentals',
   mortgageTermsRequired: 'Mortgage terms are required when mortgage is allowed',
+  alreadyDeleted: 'Property has already been deleted',
+  listed: 'Properties listed successfully',
 };

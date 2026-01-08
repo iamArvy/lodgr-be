@@ -18,6 +18,10 @@ import {
 @Exclude()
 export class PropertyResponseDto {
   @Expose()
+  @ApiProperty({ example: 'b1a2c3d4-e5f6-7890-ab12-cd34ef56gh78' })
+  id: string;
+
+  @Expose()
   @ApiProperty({ example: 'Luxury 4 Bedroom Duplex' })
   name: string;
 
@@ -70,9 +74,9 @@ export class PropertyResponseDto {
   @ApiProperty({ example: '2026-01-07T12:00:00.000Z' })
   updatedAt: Date;
 
-  @Expose()
-  @ApiProperty({ example: false })
-  deleted: boolean;
+  constructor(partial: Partial<PropertyResponseDto>) {
+    Object.assign(this, partial);
+  }
 }
 
 export const PropertyResponse = createApiResponseDto(PropertyResponseDto);

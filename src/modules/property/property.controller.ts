@@ -24,6 +24,7 @@ export class PropertyController {
     return this.propertyService.create(dto);
   }
 
+  @docs.ListPropertyDocs()
   @Get()
   findAll() {
     return this.propertyService.findAll();
@@ -35,6 +36,7 @@ export class PropertyController {
     return this.propertyService.findOne(id);
   }
 
+  @docs.UpdatePropertyDocs()
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -43,6 +45,7 @@ export class PropertyController {
     return this.propertyService.update(id, dto);
   }
 
+  @docs.DeletePropertyDocs()
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.propertyService.remove(id);
